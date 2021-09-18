@@ -1,0 +1,11 @@
+### Application ###
+.env.odoo
+.env
+/data/*
+/logs/*
+
+### Python ###
+*.pyc
+extras/odoo.private.conf
+entrypoint.private.sh
+extras/google-auth.json
