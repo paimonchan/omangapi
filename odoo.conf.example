@@ -1,5 +1,5 @@
 [options]
-; copy and past odoo.conf to root-project/odoo
+; copy and paste odoo.conf to root-project/odoo
 
 ; odoo configuration
 db_host = localhost
