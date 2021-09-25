@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_manga,manga,model_manga,base.group_user,1,1,1,1
+
+access_manga_chapter,manga chapter,model_manga_chapter,base.group_user,1,1,1,1
+
+access_manga_page,manga page,model_manga_page,base.group_user,1,1,1,1
+
+access_anima_tag,anima tag,model_anima_tag,base.group_user,1,1,1,1
