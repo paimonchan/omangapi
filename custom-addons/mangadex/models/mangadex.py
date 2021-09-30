@@ -34,6 +34,20 @@ class mangadex(models.AbstractModel):
                 descriptions.append(dict(desc=desc, lang=lang))
             return descriptions
 
+        def _destruct_tags(tag_list):
+            tags = []
+            for tag_dict in tag_list:
+                attributes = tag_dict.get('attributes') or dict()
+                is_genre = attributes.get('group') == 'genre'
+                name_dict = attributes.get('name') or dict()
+                # get tag name enlish only, ignore other
+                name = name_dict.get('en')
+                tags.append(dict(
+                    is_genere=is_genre,
+                    name=name,
+                ))
+            return tags
+
         results = self.GET('/manga')
         manga_model = self.env['manga']
         manga_ids = self.env['manga']
