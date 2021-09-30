@@ -17,7 +17,8 @@ class Manga(models.Model):
     tag_ids = fields.Many2many('anima.tag')
     tag_normalize = fields.Char(compute='_compute_tags')
     genre_normalize = fields.Char(compute='_compute_tags')
-    title_ids = fields.One2many('anima.title', 'manga_id')
+    title_ids = fields.One2many(
+        'anima.attribute', 'manga_id', domain=[('type', '=', const.ATTRIBUTE_TYPE_TITTLE)])
     title_normalize = fields.Char(compute='_compute_titles')
 
     @api.depends('chapter_ids')

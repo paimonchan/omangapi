@@ -5,4 +5,4 @@ access_manga_chapter,manga chapter,model_manga_chapter,base.group_user,1,1,1,1
 
 access_manga_page,manga page,model_manga_page,base.group_user,1,1,1,1
 
-access_anima_tag,anima tag,model_anima_tag,base.group_user,1,1,1,1
+access_anima_attribute,anima attribute,model_anima_attribute,base.group_user,1,1,1,1
