@@ -6,7 +6,7 @@ class AnimaAttribute(models.Model):
 
     manga_id = fields.Many2one('manga')
     name = fields.Char(required=True)
-    lang = fields.char(
+    lang = fields.Char(
         help='Language Type, examples: en, zh, id')
     type = fields.Selection(
         const.ATTRIBUTES_TYPE_SELECTION, required=True)
