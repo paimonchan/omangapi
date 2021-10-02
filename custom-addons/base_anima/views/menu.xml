@@ -1,0 +1,9 @@
+<odoo>
+    <menuitem id="manga_root" name="Manga"/>
+        <menuitem id="manga_parent" name="Manga" parent="manga_root"/>
+            <menuitem id="manga_menu" name="Manga List" parent="manga_parent" action="manga_action"/>
+            <menuitem id="tag_menu" name="Manga Tag" parent="manga_parent"/>
+        <menuitem id="config_parent" name="config" parent="manga_root"/>
+    <menuitem id="anime_root" name="Anime"/>
+    <!-- TODO: add anime menu in here -->
+</odoo>
