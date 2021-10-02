@@ -14,3 +14,15 @@ ATTRIBUTES_TYPE_SELECTION = [
     (ATTRIBUTE_TYPE_TITTLE, 'Title'),
     (ATTRIBUTE_TYPE_DESCRIPTION, 'Description'),
 ]
+
+STATE_HIATUS = 'hiatus'
+STATE_ONGOING = 'ongoing'
+STATE_COMPLETED = 'completed'
+STATE_CANCELLED = 'cancelled'
+
+MANGA_STATES_SELECTION = [
+    (STATE_HIATUS, 'Hiatus'),
+    (STATE_ONGOING, 'Ongoing'),
+    (STATE_COMPLETED, 'Completed'),
+    (STATE_CANCELLED, 'Cancelled'),
+]

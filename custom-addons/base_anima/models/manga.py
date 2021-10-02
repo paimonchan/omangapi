@@ -10,7 +10,7 @@ class Manga(models.Model):
     alt_name = fields.Char()
     description = fields.Text()
     name = fields.Char(required=True)
-    source_id = fields.Char(required=True)
+    source_id = fields.Char(required=True, index=True)
     source = fields.Selection(const.MANGA_SOURCE_SELECTION)
     chapter_ids = fields.One2many('manga.chapter', 'manga_id')
     chapter_count = fields.Integer(compute='_compute_chapter_count', store=True)
@@ -20,6 +20,10 @@ class Manga(models.Model):
     title_ids = fields.One2many(
         'anima.attribute', 'manga_id', domain=[('type', '=', const.ATTRIBUTE_TYPE_TITTLE)])
     title_normalize = fields.Char(compute='_compute_titles')
+    description_ids = fields.One2many(
+        'anima.attribute', 'manga_id', domain=[('type', '=', const.ATTRIBUTE_TYPE_DESCRIPTION)])
+    content_rating = fields.Char()
+    state = fields.Selection(const.MANGA_STATES_SELECTION)
 
     @api.depends('chapter_ids')
     def _compute_chapter_count(self):
