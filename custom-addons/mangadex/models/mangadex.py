@@ -43,7 +43,7 @@ class mangadex(models.AbstractModel):
                 descriptions.append(dict(desc=desc, lang=lang))
             return descriptions
 
-        def _destruct_tags(tag_list):
+        def _destruct_tags(tag_list, publication_demographic=False):
             tags = []
             for tag_dict in tag_list:
                 attributes = tag_dict.get('attributes') or dict()
@@ -52,8 +52,14 @@ class mangadex(models.AbstractModel):
                 # get tag name enlish only, ignore other
                 name = name_dict.get('en')
                 tags.append(dict(
-                    is_genere=is_genre,
+                    is_genre=is_genre,
                     name=name,
+                ))
+            # publication demographic = shounen, shoujo, josei, seinen
+            if publication_demographic:
+                tags.append(dict(
+                    is_genre=True,
+                    name=publication_demographic,
                 ))
             return tags
 
