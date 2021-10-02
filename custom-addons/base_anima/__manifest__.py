@@ -11,7 +11,5 @@
         # load access model
         'security/ir.model.access.csv',
         # load view model
-        'views/views.xml',
-        'views/templates.xml',
     ],
 }
