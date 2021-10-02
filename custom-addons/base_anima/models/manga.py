@@ -25,6 +25,11 @@ class Manga(models.Model):
     content_rating = fields.Char()
     state = fields.Selection(const.MANGA_STATES_SELECTION)
 
+    _sql_constraints = [
+        ('model_uniq','unique (source_id)',
+         'Source id manga already exists !')
+    ]
+
     @api.depends('chapter_ids')
     def _compute_chapter_count(self):
         for record in self:
