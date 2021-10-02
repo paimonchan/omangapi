@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models
+from ..helpers import const
+from odoo.addons.base_anima.helpers import const as anima_const
 
 class mangadex(models.AbstractModel):
     _inherit = 'request'
@@ -66,10 +68,44 @@ class mangadex(models.AbstractModel):
         # main function logic
         
         results = self.GET(_construct_endpoint())
+        datas = results.get('data', [])
         manga_model = self.env['manga']
         manga_ids = self.env['manga']
-        for result in result:
-            manga_ids = manga_model.create(dict(
+        for result in datas:
+            source_id = result.get('id', False)
+            exist = self.env['manga'].search([('source_id', '=', source_id)])
+            # validate if source_id already pulled
+            if exist:
+                continue
 
+            attributes = result.get('attributes') or dict()
+            alt_title_datas = attributes.get('altTitle', dict())
+            title_datas = attributes.get('title', dict())
+            desc = attributes.get('description', dict())
+
+            alt_titles = _desctruct_title(title_datas, alt_title_datas)
+            main_title = _main_title(title_datas)
+            alt_desc = _destruct_desc(desc)
+            main_desc = _main_desc(desc)
+
+            title_ids = [(0, 0, dict(
+                lang=d['lang'], 
+                name=d['title'],
+                type=anima_const.ATTRIBUTE_TYPE_TITTLE
+            )) for d in alt_titles]
+
+            desc_ids = [(0, 0, dict(
+                lang=d['lang'],
+                name=d['desc'],
+                type=anima_const.ATTRIBUTE_TYPE_DESCRIPTION
+            )) for d in alt_desc]
+
+            manga_ids |= manga_model.create(dict(
+                source=anima_const.MANGA_SOURCE_MANAGEDEX,
+                description_ids=desc_ids or False,
+                title_ids=title_ids or False,
+                description=main_desc,
+                source_id=source_id,
+                name=main_title,
             ))
-        return result
+        return results
