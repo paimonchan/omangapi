@@ -13,7 +13,7 @@ class mangadex(models.AbstractModel):
     def pull_manga(self, limit=1, offset=False):
         def _get_latest_offset():
             sysparam = self.env['ir.config_parameter'].sudo()
-            next_offset = offset or sysparam.get_param(const.PARAMS_MANGADEX_LATEST_MANGA_OFFSET, 0)
+            next_offset = offset or int(sysparam.get_param(const.PARAMS_MANGADEX_LATEST_MANGA_OFFSET, 0))
             # don't update sysparams when offset is custom
             if not offset:
                 sysparam.set_param(const.PARAMS_MANGADEX_LATEST_MANGA_OFFSET, next_offset + 1)
