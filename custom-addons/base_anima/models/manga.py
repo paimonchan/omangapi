@@ -22,7 +22,7 @@ class Manga(models.Model):
     title_normalize = fields.Char(compute='_compute_titles')
     description_ids = fields.One2many(
         'anima.attribute', 'manga_id', domain=[('type', '=', const.ATTRIBUTE_TYPE_DESCRIPTION)])
-    content_rating = fields.Char()
+    content_rating = fields.Selection(const.CONTENT_RATING_SELECTION)
     state = fields.Selection(const.MANGA_STATES_SELECTION)
 
     _sql_constraints = [
