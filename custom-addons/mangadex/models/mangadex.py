@@ -44,6 +44,20 @@ class mangadex(models.AbstractModel):
                 descriptions.append(dict(desc=desc, lang=lang))
             return descriptions
 
+        def _destruct_content_rating(content_rating):
+            if content_rating == 'safe':
+                return anima_const.CONTENT_RATING_SAFE
+            return anima_const.CONTENT_RATING_MATURE
+        
+        def _destruct_status(status):
+            if status == 'completed':
+                return anima_const.STATE_COMPLETED
+            elif status == 'hiatus':
+                return anima_const.STATE_HIATUS
+            elif status == 'cancelled':
+                return anima_const.STATE_CANCELLED
+            return anima_const.STATE_ONGOING
+
         def _destruct_tags(tag_list, publication_demographic=False):
             tags = []
             for tag_dict in tag_list:
