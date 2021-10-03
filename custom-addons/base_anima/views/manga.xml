@@ -6,9 +6,22 @@
             <tree>
                 <field name="name"/>
                 <field name="source"/>
-                <field name="tag_ids" widget="many2many_tags"/>
-                <field name="content_rating"/>
-                <field name="state"/>
+                <field 
+                    name="tag_ids" 
+                    widget="many2many_tags" 
+                    options="{'color_field': 'color'}"/>
+                <field 
+                    name="content_rating"
+                    decoration-success="content_rating == 'safe'"
+                    decoration-danger="content_rating == 'mature'"
+                    widget="badge" optional="show"
+                    />
+                <field 
+                    name="state" 
+                    decoration-danger="state == 'hiatus' or state == 'cancelled'"
+                    decoration-success="state == 'completed'"
+                    decoration-info="state == 'ongoing'"
+                    widget="badge" optional="show"/>
             </tree>
         </field>
     </record>
@@ -23,8 +36,15 @@
                         <group>
                             <field name="name"/>
                             <field name="source"/>
-                            <field name="tag_ids" widget="many2many_tags"/>
-                            <field name="content_rating"/>
+                            <field 
+                                name="tag_ids"
+                                widget="many2many_tags"
+                                options="{'color_field': 'color'}"/>
+                            <field 
+                                name="content_rating"
+                                decoration-success="content_rating == 'safe'"
+                                decoration-danger="content_rating == 'mature'"
+                                widget="badge" optional="show"/>
                         </group>
                         <group>
                             <field name="source_id"/>
@@ -35,20 +55,12 @@
                         <page string="Description">
                             <field name="description" widget="text"/>
                         </page>
-                        <!-- TODO: create dedicated view for anima.attribute -->
                         <page string="Alternative Names">
                             <field name="title_ids">
                                 <tree>
                                     <field name="lang"/>
                                     <field name="name"/>
                                 </tree>
-                                <form>
-                                    <group>
-                                        <field name="lang"/>
-                                        <field name="type"/>
-                                    </group>
-                                    <field name="name"/>
-                                </form>
                             </field>
                         </page>
                         <page string="Alternative Description">
@@ -57,13 +69,6 @@
                                     <field name="lang"/>
                                     <field name="name"/>
                                 </tree>
-                                <form>
-                                    <group>
-                                        <field name="lang"/>
-                                        <field name="type"/>
-                                    </group>
-                                    <field name="name"/>
-                                </form>
                             </field>
                         </page>
                     </notebook>

@@ -1,0 +1,67 @@
+<odoo>
+    <record model="ir.ui.view" id="anima_attribute_tree">
+        <field name="name">anima attribute tree</field>
+        <field name="model">anima.attribute</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="type"/>
+                <field name="lang"/>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="anima_attribute_form">
+        <field name="name">anima attribute from</field>
+        <field name="model">anima.attribute</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="lang"/>
+                        <field name="type"/>
+                    </group>
+                    <group>
+                        <field name="manga_id"/>
+                    </group>
+                </group>
+                <notebook>
+                    <page string="Text">
+                        <field name="name"/>
+                    </page>
+                </notebook>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="anima_attribute_search">
+        <field name="name">anima attribute search</field>
+        <field name="model">anima.attribute</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="lang"/>
+                <field name="name"/>
+                <field name="type"/>
+                <field name="manga_id"/>
+                <separator/>
+                <filter string="Manga" name="manga" domain="[('manga_id','!=', False)]"/>
+                <separator/>
+                <filter string="Title" name="title" domain="[('type','=','title')]"/>
+                <filter string="Description" name="description" domain="[('type','=','description')]"/>
+                <group expand="1" string="Group By">
+                    <filter string="Lang" name="lang" context="{'group_by':'lang'}"/>
+                    <filter string="Type" name="type" context="{'group_by':'type'}"/>
+                    <separator/>
+                    <filter string="Manga" name="manga" context="{'group_by':'manga_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <act_window
+        name="Attribute"
+        id="anima_attribute_action"
+        res_model="anima.attribute"
+        view_mode="tree,form"
+        target="current"/>
+</odoo>

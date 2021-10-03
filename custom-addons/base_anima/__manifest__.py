@@ -11,6 +11,7 @@
         # load access model
         'security/ir.model.access.csv',
         # load view model
+        'views/anima_attribute.xml',
         'views/manga.xml',
         'views/menu.xml',
     ],
