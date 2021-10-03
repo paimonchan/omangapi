@@ -109,14 +109,21 @@ class mangadex(models.AbstractModel):
                 continue
 
             attributes = result.get('attributes') or dict()
-            alt_title_datas = attributes.get('altTitle', dict())
+            content_rating_datas = attributes.get('contentRating', str())
+            pd = attributes.get('publicationDemographic', False)
+            desc_datas = attributes.get('description', dict())
+            alt_title_datas = attributes.get('altTitle', [])
             title_datas = attributes.get('title', dict())
-            desc = attributes.get('description', dict())
+            tag_datas = attributes.get('tags', [])
+            status = attributes.get('state')
 
+            content_rating = _destruct_content_rating(content_rating_datas)
             alt_titles = _desctruct_title(title_datas, alt_title_datas)
             main_title = _main_title(title_datas)
-            alt_desc = _destruct_desc(desc)
-            main_desc = _main_desc(desc)
+            alt_desc = _destruct_desc(desc_datas)
+            tags = _destruct_tags(tag_datas, pd)
+            main_desc = _main_desc(desc_datas)
+            state = _destruct_status(status)
 
             title_ids = [(0, 0, dict(
                 lang=d['lang'], 
@@ -129,13 +136,18 @@ class mangadex(models.AbstractModel):
                 name=d['desc'],
                 type=anima_const.ATTRIBUTE_TYPE_DESCRIPTION
             )) for d in alt_desc]
+            
+            tag_ids = [(4, tag.id) for tag in _get_or_create_tag_ids(tags)]
 
             manga_ids |= manga_model.create(dict(
                 source=anima_const.MANGA_SOURCE_MANAGEDEX,
+                content_rating=content_rating,
                 description_ids=desc_ids or False,
                 title_ids=title_ids or False,
+                tag_ids=tag_ids or False,
                 description=main_desc,
                 source_id=source_id,
                 name=main_title,
+                state=state,
             ))
         return results
