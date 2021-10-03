@@ -77,6 +77,21 @@ class mangadex(models.AbstractModel):
                     name=publication_demographic,
                 ))
             return tags
+        
+        def _get_or_create_tag_ids(destruct_tags):
+            tag_ids = self.env['anima.tag']
+            tag_model = self.env['anima.tag']
+            for tag in tags:
+                # find name tag case insensitive
+                tag_id = tag_model.search(
+                    [('name', '=ilike', tag['name'])], limit=1)
+                if not tag_id:
+                    tag_id = tag_model.create(dict(
+                        name=tag['name'],
+                        is_genre=tag['is_genre'],
+                    ))
+                tag_ids |= tag_id
+            return tag_ids
 
         # main function logic
         
