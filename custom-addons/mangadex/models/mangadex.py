@@ -16,7 +16,7 @@ class mangadex(models.AbstractModel):
             next_offset = offset or int(sysparam.get_param(const.PARAMS_MANGADEX_LATEST_MANGA_OFFSET, 0))
             # don't update sysparams when offset is custom
             if not offset:
-                sysparam.set_param(const.PARAMS_MANGADEX_LATEST_MANGA_OFFSET, next_offset + 1)
+                sysparam.set_param(const.PARAMS_MANGADEX_LATEST_MANGA_OFFSET, next_offset + limit)
             return next_offset
 
         def _main_title(title_dict):
