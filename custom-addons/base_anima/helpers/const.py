@@ -1,8 +1,8 @@
 # Constanta declaration
-MANGA_SOURCE_MANAGEDEX = 'mangadex'
+MANGA_SOURCE_MANGADEX = 'mangadex'
 
 MANGA_SOURCE_SELECTION = [
-    (MANGA_SOURCE_MANAGEDEX, 'Mangadex'),
+    (MANGA_SOURCE_MANGADEX, 'Mangadex'),
 ]
 
 ATTRIBUTE_TYPE_TAG = 'tag'
