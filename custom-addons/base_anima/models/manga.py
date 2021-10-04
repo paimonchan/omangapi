@@ -24,9 +24,10 @@ class Manga(models.Model):
         'anima.attribute', 'manga_id', domain=[('type', '=', const.ATTRIBUTE_TYPE_DESCRIPTION)])
     content_rating = fields.Selection(const.CONTENT_RATING_SELECTION)
     state = fields.Selection(const.MANGA_STATES_SELECTION)
+    version = fields.Integer(default=1)
 
     _sql_constraints = [
-        ('model_uniq','unique (source_id)',
+        ('model_uniq','unique (source_id, source, version)',
          'Source id manga already exists !')
     ]
 

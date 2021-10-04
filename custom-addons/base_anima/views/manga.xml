@@ -49,6 +49,7 @@
                         <group>
                             <field name="source_id"/>
                             <field name="source"/>
+                            <field name="version"/>
                         </group>
                     </group>
                     <notebook>
