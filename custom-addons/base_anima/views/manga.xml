@@ -84,13 +84,15 @@
         <field name="arch" type="xml">
             <search>
                 <field 
-                    name="name" string="Product" 
+                    name="name" string="Name" 
                     filter_domain="['|', ('name', 'ilike', self), ('title_normalize', 'ilike', self)]"/>
+                <field name="source_id" string="Source Id"/>
                 <separator/>
-                <filter string="Ongoing" name="services" domain="[('state','=','ongonig')]"/>
+                <filter string="Ongoing" name="services" domain="[('state','=','ongoing')]"/>
                 <filter string="Complete" name="services" domain="[('state','=','completed')]"/>
                 <group expand="1" string="Group By">
                     <filter string="State" name="state" context="{'group_by':'state'}"/>
+                    <filter string="Source Id" name="source_id" context="{'group_by':'source_id'}"/>
                 </group>
             </search>
         </field>
