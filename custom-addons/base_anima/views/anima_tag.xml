@@ -1,0 +1,53 @@
+<odoo>
+    <record model="ir.ui.view" id="anima_tag_tree">
+        <field name="name">anima tag tree</field>
+        <field name="model">anima.tag</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="color"/>
+                <field name="is_genre"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="anima_tag_form">
+        <field name="name">anima tag form</field>
+        <field name="model">anima.tag</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="name"/>
+                        <field name="color"/>
+                        <field name="is_genre"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="anima_tag_search">
+        <field name="name">anima tag search</field>
+        <field name="model">anima.tag</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="color"/>
+                <separator/>
+                <filter string="Is Genre?" name="is_genre" domain="[('is_genre','=', True)]"/>
+                <group expand="1" string="Group By">
+                    <filter string="Is Genre" name="is_genre" context="{'group_by':'is_genre'}"/>
+                    <filter string="Color" name="color" context="{'group_by':'color'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <act_window
+        name="Tags"
+        id="anima_tag_action"
+        res_model="anima.tag"
+        view_mode="tree,form"
+        target="current"/>
+</odoo>
