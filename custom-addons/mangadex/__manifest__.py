@@ -9,5 +9,6 @@
     'depends': ['base_common', 'base_anima'],
     'data': [
         'security/ir.model.access.csv',
+        'datas/ir_cron.xml',
     ],
 }
