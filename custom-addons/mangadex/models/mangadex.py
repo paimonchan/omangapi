@@ -2,6 +2,7 @@
 
 from odoo import models
 from ..helpers import const
+from odoo.addons.base_common.helpers import log
 from odoo.addons.base_anima.helpers import const as anima_const
 
 class mangadex(models.AbstractModel):
@@ -81,7 +82,7 @@ class mangadex(models.AbstractModel):
         def _get_or_create_tag_ids(destruct_tags):
             tag_ids = self.env['anima.tag']
             tag_model = self.env['anima.tag']
-            for tag in tags:
+            for tag in destruct_tags:
                 # find name tag case insensitive
                 tag_id = tag_model.search(
                     [('name', '=ilike', tag['name'])], limit=1)
@@ -92,62 +93,74 @@ class mangadex(models.AbstractModel):
                     ))
                 tag_ids |= tag_id
             return tag_ids
-
-        # main function logic
         
-        offset = offset or _get_latest_offset()
-        params = dict(limit=limit, offset=offset)
-        results = self.GET('/manga', params)
-        datas = results.get('data', [])
-        manga_model = self.env['manga']
-        manga_ids = self.env['manga']
-        for result in datas:
-            source_id = result.get('id', False)
-            exist = self.env['manga'].search([('source_id', '=', source_id)])
-            # validate if source_id already pulled
-            if exist:
-                continue
+        def _main_cron():
+            next_offset = offset or _get_latest_offset()
+            params = dict(limit=limit, offset=next_offset)
+            results = self.GET('/manga', params)
+            datas = results.get('data', [])
+            manga_model = self.env['manga']
+            manga_ids = self.env['manga']
+            for result in datas:
+                attributes = result.get('attributes') or dict()
+                version = attributes.get('version') or 1
+                source_id = result.get('id') or False
+                exist = self.env['manga'].search([
+                    ('source', '=', anima_const.MANGA_SOURCE_MANGADEX),
+                    ('source_id', '=', source_id),
+                    ('version', '=', version),
+                ])
+                # validate if source_id already pulled
+                if exist:
+                    continue
 
-            attributes = result.get('attributes') or dict()
-            content_rating_datas = attributes.get('contentRating', str())
-            pd = attributes.get('publicationDemographic', False)
-            desc_datas = attributes.get('description', dict())
-            alt_title_datas = attributes.get('altTitle', [])
-            title_datas = attributes.get('title', dict())
-            tag_datas = attributes.get('tags', [])
-            status = attributes.get('state')
+                content_rating_datas = attributes.get('contentRating', str())
+                pd = attributes.get('publicationDemographic') or False
+                desc_datas = attributes.get('description') or dict()
+                alt_title_datas = attributes.get('altTitle') or []
+                title_datas = attributes.get('title') or dict()
+                tag_datas = attributes.get('tags') or dict()
+                status = attributes.get('status') or str()
 
-            content_rating = _destruct_content_rating(content_rating_datas)
-            alt_titles = _desctruct_title(title_datas, alt_title_datas)
-            main_title = _main_title(title_datas)
-            alt_desc = _destruct_desc(desc_datas)
-            tags = _destruct_tags(tag_datas, pd)
-            main_desc = _main_desc(desc_datas)
-            state = _destruct_status(status)
+                content_rating = _destruct_content_rating(content_rating_datas)
+                alt_titles = _desctruct_title(title_datas, alt_title_datas)
+                main_title = _main_title(title_datas)
+                alt_desc = _destruct_desc(desc_datas)
+                tags = _destruct_tags(tag_datas, pd)
+                main_desc = _main_desc(desc_datas)
+                state = _destruct_status(status)
 
-            title_ids = [(0, 0, dict(
-                lang=d['lang'], 
-                name=d['title'],
-                type=anima_const.ATTRIBUTE_TYPE_TITTLE
-            )) for d in alt_titles]
+                title_ids = [(0, 0, dict(
+                    lang=d['lang'], 
+                    name=d['title'],
+                    type=anima_const.ATTRIBUTE_TYPE_TITTLE
+                )) for d in alt_titles]
 
-            desc_ids = [(0, 0, dict(
-                lang=d['lang'],
-                name=d['desc'],
-                type=anima_const.ATTRIBUTE_TYPE_DESCRIPTION
-            )) for d in alt_desc]
-            
-            tag_ids = [(4, tag.id) for tag in _get_or_create_tag_ids(tags)]
+                desc_ids = [(0, 0, dict(
+                    lang=d['lang'],
+                    name=d['desc'],
+                    type=anima_const.ATTRIBUTE_TYPE_DESCRIPTION
+                )) for d in alt_desc]
+                
+                tag_ids = [(4, tag.id) for tag in _get_or_create_tag_ids(tags)]
 
-            manga_ids |= manga_model.create(dict(
-                source=anima_const.MANGA_SOURCE_MANAGEDEX,
-                content_rating=content_rating,
-                description_ids=desc_ids or False,
-                title_ids=title_ids or False,
-                tag_ids=tag_ids or False,
-                description=main_desc,
-                source_id=source_id,
-                name=main_title,
-                state=state,
-            ))
-        return results
+                manga_ids |= manga_model.create(dict(
+                    source=anima_const.MANGA_SOURCE_MANGADEX,
+                    content_rating=content_rating,
+                    description_ids=desc_ids or False,
+                    title_ids=title_ids or False,
+                    tag_ids=tag_ids or False,
+                    description=main_desc,
+                    source_id=source_id,
+                    name=main_title,
+                    version=version,
+                    state=state,
+                ))
+            return results
+        
+        # main function logic
+        try:
+            _main_cron()
+        except Exception as ex:
+            log.error(self, str(ex))
+            raise
