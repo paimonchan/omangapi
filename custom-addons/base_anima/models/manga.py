@@ -25,6 +25,8 @@ class Manga(models.Model):
     content_rating = fields.Selection(const.CONTENT_RATING_SELECTION)
     state = fields.Selection(const.MANGA_STATES_SELECTION)
     version = fields.Integer(default=1)
+    author_ids = fields.Many2many(
+        'anima.author', 'manga_author_rel', 'manga_id', 'author_id')
 
     _sql_constraints = [
         ('model_uniq','unique (source_id, source, version)',
