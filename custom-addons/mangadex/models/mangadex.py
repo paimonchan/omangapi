@@ -164,3 +164,7 @@ class mangadex(models.AbstractModel):
         except Exception as ex:
             log.error(self, str(ex))
             raise
+    
+    def pull_author(self, limit=1, offset=False):
+        # TODO add cronjob to pull author and connect to manga
+        pass
