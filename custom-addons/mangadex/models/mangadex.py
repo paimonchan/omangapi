@@ -172,6 +172,30 @@ class mangadex(models.AbstractModel):
             log.error(self, str(ex))
             raise
     
-    def pull_author(self, limit=1, offset=False):
-        # TODO add cronjob to pull author and connect to manga
-        pass
+    def pull_author(self, limit=1, offset=False, no_update_sysparam=False):
+        def _get_latest_offset():
+            sysparam = self.env['ir.config_parameter'].sudo()
+            next_offset = offset or int(sysparam.get_param(const.PARAMS_MANGADEX_LATEST_AUTHOR_OFFSET, 0))
+            return next_offset
+        
+        def _set_latest_offset(count):
+            sysparam = self.env['ir.config_parameter'].sudo()
+            offset = int(sysparam.get_param(const.PARAMS_MANGADEX_LATEST_AUTHOR_OFFSET, 0))
+            sysparam.set_param(const.PARAMS_MANGADEX_LATEST_AUTHOR_OFFSET, offset + count)
+
+        def _main_cron():
+            next_offset = offset or _get_latest_offset()
+            params = dict(limit=limit, offset=next_offset)
+            results = self.GET('/author', params)
+            datas = results.get('data', [])
+            # TODO add logic to generate author and connect to manga
+            if not no_update_sysparam:
+                # update next offset
+                _set_latest_offset(len(datas))
+        
+        # main function logic
+        try:
+            _main_cron()
+        except Exception as ex:
+            log.error(self, str(ex))
+            raise
