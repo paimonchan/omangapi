@@ -11,14 +11,16 @@ class mangadex(models.AbstractModel):
     _description = 'Mangadex'
     _base_url_config_key = 'source_mangadex'
 
-    def pull_manga(self, limit=1, offset=False):
+    def pull_manga(self, limit=1, offset=False, no_update_sysparam=False):
         def _get_latest_offset():
             sysparam = self.env['ir.config_parameter'].sudo()
             next_offset = offset or int(sysparam.get_param(const.PARAMS_MANGADEX_LATEST_MANGA_OFFSET, 0))
-            # don't update sysparams when offset is custom
-            if not offset:
-                sysparam.set_param(const.PARAMS_MANGADEX_LATEST_MANGA_OFFSET, next_offset + limit)
             return next_offset
+        
+        def _set_latest_offset(count):
+            sysparam = self.env['ir.config_parameter'].sudo()
+            offset = int(sysparam.get_param(const.PARAMS_MANGADEX_LATEST_MANGA_OFFSET, 0))
+            sysparam.set_param(const.PARAMS_MANGADEX_LATEST_MANGA_OFFSET, offset + count)
 
         def _main_title(title_dict):
             titles = [title_dict[key] for key in title_dict.keys()]
@@ -156,6 +158,11 @@ class mangadex(models.AbstractModel):
                     version=version,
                     state=state,
                 ))
+
+            if not no_update_sysparam:
+                # update next offset
+                _set_latest_offset(len(datas))
+
             return results
         
         # main function logic
