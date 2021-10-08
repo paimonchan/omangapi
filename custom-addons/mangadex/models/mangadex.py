@@ -158,6 +158,7 @@ class mangadex(models.AbstractModel):
                     version=version,
                     state=state,
                 ))
+                # TODO: add action to connect manga into author in here to
 
             if not no_update_sysparam:
                 # update next offset
