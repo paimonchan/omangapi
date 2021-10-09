@@ -227,7 +227,31 @@ class mangadex(models.AbstractModel):
             params = dict(limit=limit, offset=next_offset)
             results = self.GET('/author', params)
             datas = results.get('data', [])
-            # TODO add logic to generate author and connect to manga
+
+            author_model = self.env['anima.author']
+            author_ids = self.env['anima.author']
+            for result in datas:
+                relationships = result.get('relationships') or dict()
+                attributes = result.get('attributes') or dict()
+                source_id = result.get('id') or str()
+                name = result.get('name') or str()
+                
+                # check if already exist
+                exist = author_model.search(
+                    [('source_id', '=', source_id),], limit=1)
+                if exist:
+                    continue
+
+                social_media_ids = _prepare_social_media(attributes) or False
+                author = author_model.create(dict(
+                    social_media_ids=social_media_ids,
+                    source_id=source_id,
+                    name=name,
+                ))
+                manga_source_ids = _destruct_manga_source_ids(relationships)
+                _connect_existing_manga(author, manga_source_ids)
+                author_ids |= author
+
             if not no_update_sysparam:
                 # update next offset
                 _set_latest_offset(len(datas))
