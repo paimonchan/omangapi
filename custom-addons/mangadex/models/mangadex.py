@@ -214,6 +214,13 @@ class mangadex(models.AbstractModel):
                 attributes.items() if (key in medias and val)
             ]
             return social_medias
+        
+        def _connect_existing_manga(author, manga_source_ids):
+            mangas = self.env['manga'].search(
+                [('source_id', 'in', manga_source_ids),])
+            if not mangas:
+                return
+            author.write(dict(manga_ids=[(4, id,) for id in mangas.ids]))
 
         def _main_cron():
             next_offset = offset or _get_latest_offset()
