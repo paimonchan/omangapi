@@ -96,6 +96,17 @@ class mangadex(models.AbstractModel):
                 tag_ids |= tag_id
             return tag_ids
         
+        def _destruct_author_source_ids(relationships):
+            source_ids = [rel['id'] for rel in relationships if rel['type'] == 'author']
+            return source_ids or []
+
+        def _connect_existing_author(manga, author_source_ids):
+            authors = self.env['anima.author'].search(
+                [('source_id', 'in', author_source_ids)])
+            if not authors:
+                return
+            manga.write(dict(manga_ids=[(4, id,) for id in authors.ids]))
+        
         def _main_cron():
             next_offset = offset or _get_latest_offset()
             params = dict(limit=limit, offset=next_offset)
@@ -104,6 +115,7 @@ class mangadex(models.AbstractModel):
             manga_model = self.env['manga']
             manga_ids = self.env['manga']
             for result in datas:
+                relationships = result.get('relationships') or dict()
                 attributes = result.get('attributes') or dict()
                 version = attributes.get('version') or 1
                 source_id = result.get('id') or False
@@ -146,7 +158,7 @@ class mangadex(models.AbstractModel):
                 
                 tag_ids = [(4, tag.id) for tag in _get_or_create_tag_ids(tags)]
 
-                manga_ids |= manga_model.create(dict(
+                manga = manga_model.create(dict(
                     source=anima_const.MANGA_SOURCE_MANGADEX,
                     content_rating=content_rating,
                     description_ids=desc_ids or False,
@@ -158,13 +170,15 @@ class mangadex(models.AbstractModel):
                     version=version,
                     state=state,
                 ))
-                # TODO: add action to connect manga into author in here to
+                author_source_ids = _destruct_author_source_ids(relationships)
+                _connect_existing_author(manga, author_source_ids)
+                manga_ids |= manga
 
             if not no_update_sysparam:
                 # update next offset
                 _set_latest_offset(len(datas))
 
-            return results
+            return manga_ids
         
         # main function logic
         try:
