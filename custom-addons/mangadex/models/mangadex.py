@@ -202,6 +202,18 @@ class mangadex(models.AbstractModel):
             source_ids = [rel['id'] for rel in relationships if rel['type'] == 'manga']
             return source_ids or []
         
+        def _prepare_social_media(attributes):
+            medias = [
+                'twitter', 'pixiv', 'melonBook', 
+                'fanBox', 'booth', 'nicoVideo',
+                'skeb', 'fantia', 'tumblr',
+                'youtube', 'website'
+            ]
+            social_medias = [
+                (0, 0, dict(name=val)) for key, val in 
+                attributes.items() if (key in medias and val)
+            ]
+            return social_medias
 
         def _main_cron():
             next_offset = offset or _get_latest_offset()
