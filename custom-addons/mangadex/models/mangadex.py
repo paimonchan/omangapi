@@ -197,6 +197,11 @@ class mangadex(models.AbstractModel):
             sysparam = self.env['ir.config_parameter'].sudo()
             offset = int(sysparam.get_param(const.PARAMS_MANGADEX_LATEST_AUTHOR_OFFSET, 0))
             sysparam.set_param(const.PARAMS_MANGADEX_LATEST_AUTHOR_OFFSET, offset + count)
+        
+        def _destruct_manga_source_ids(relationships):
+            source_ids = [rel['id'] for rel in relationships if rel['type'] == 'manga']
+            return source_ids or []
+        
 
         def _main_cron():
             next_offset = offset or _get_latest_offset()
