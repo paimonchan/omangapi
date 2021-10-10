@@ -233,8 +233,8 @@ class mangadex(models.AbstractModel):
             for result in datas:
                 relationships = result.get('relationships') or dict()
                 attributes = result.get('attributes') or dict()
+                name = attributes.get('name') or str()
                 source_id = result.get('id') or str()
-                name = result.get('name') or str()
                 
                 # check if already exist
                 exist = author_model.search(
@@ -244,7 +244,7 @@ class mangadex(models.AbstractModel):
 
                 social_media_ids = _prepare_social_media(attributes) or False
                 author = author_model.create(dict(
-                    social_media_ids=social_media_ids,
+                    social_ids=social_media_ids,
                     source_id=source_id,
                     name=name,
                 ))
