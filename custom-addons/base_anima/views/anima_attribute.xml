@@ -16,20 +16,22 @@
         <field name="model">anima.attribute</field>
         <field name="arch" type="xml">
             <form>
-                <group>
+                <sheet>
                     <group>
-                        <field name="lang"/>
-                        <field name="type"/>
+                        <group>
+                            <field name="lang"/>
+                            <field name="type"/>
+                        </group>
+                        <group>
+                            <field name="manga_id"/>
+                        </group>
                     </group>
-                    <group>
-                        <field name="manga_id"/>
-                    </group>
-                </group>
-                <notebook>
-                    <page string="Text">
-                        <field name="name"/>
-                    </page>
-                </notebook>
+                    <notebook>
+                        <page string="Text">
+                            <field name="name"/>
+                        </page>
+                    </notebook>
+                </sheet>
             </form>
         </field>
     </record>

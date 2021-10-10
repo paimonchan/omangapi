@@ -16,13 +16,15 @@
         <field name="model">anima.tag</field>
         <field name="arch" type="xml">
             <form>
-                <group>
+                <sheet>
                     <group>
-                        <field name="name"/>
-                        <field name="color"/>
-                        <field name="is_genre"/>
+                        <group>
+                            <field name="name"/>
+                            <field name="color"/>
+                            <field name="is_genre"/>
+                        </group>
                     </group>
-                </group>
+                </sheet>
             </form>
         </field>
     </record>
