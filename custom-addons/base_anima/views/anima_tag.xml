@@ -44,10 +44,10 @@
         </field>
     </record>
 
-    <act_window
-        name="Tags"
-        id="anima_tag_action"
-        res_model="anima.tag"
-        view_mode="tree,form"
-        target="current"/>
+    <record id="anima_tag_action" model="ir.actions.act_window">
+        <field name="name">Tags</field>
+        <field name="res_model">anima.tag</field>
+        <field name="view_mode">tree,form</field>
+        <field name="target">current</field>
+    </record>
 </odoo>

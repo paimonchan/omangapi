@@ -98,10 +98,10 @@
         </field>
     </record>
 
-    <act_window
-        name="Manga"
-        id="manga_action"
-        res_model="manga"
-        view_mode="tree,form"
-        target="current"/>
+    <record id="manga_action" model="ir.actions.act_window">
+        <field name="name">Manga</field>
+        <field name="res_model">manga</field>
+        <field name="view_mode">tree,form</field>
+        <field name="target">current</field>
+    </record>
 </odoo>

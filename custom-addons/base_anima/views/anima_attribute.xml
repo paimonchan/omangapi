@@ -58,10 +58,10 @@
         </field>
     </record>
 
-    <act_window
-        name="Attribute"
-        id="anima_attribute_action"
-        res_model="anima.attribute"
-        view_mode="tree,form"
-        target="current"/>
+    <record id="anima_attribute_action" model="ir.actions.act_window">
+        <field name="name">Attribute</field>
+        <field name="res_model">anima.attribute</field>
+        <field name="view_mode">tree,form</field>
+        <field name="target">current</field>
+    </record>
 </odoo>
