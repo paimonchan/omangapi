@@ -1,0 +1,57 @@
+<odoo>
+    <record model="ir.ui.view" id="anima_author_tree">
+        <field name="name">anima author tree</field>
+        <field name="model">anima.author</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="source_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="anima_author_form">
+        <field name="name">anima author from</field>
+        <field name="model">anima.author</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="source_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Manga(s)">
+                            <field name="manga_ids"/>
+                        </page>
+                        <page string="Social Media">
+                            <field name="social_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="anima_author_search">
+        <field name="name">anima author search</field>
+        <field name="model">anima.author</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="source_id"/>
+                <separator/>
+                <filter string="Manga" name="manga" domain="[('manga_ids','!=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="anima_author_action" model="ir.actions.act_window">
+        <field name="name">Author</field>
+        <field name="res_model">anima.author</field>
+        <field name="view_mode">tree,form</field>
+        <field name="target">current</field>
+    </record>
+</odoo>

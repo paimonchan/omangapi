@@ -4,6 +4,7 @@
             <menuitem id="manga_menu" name="Manga List" parent="manga_parent" action="manga_action"/>
             <menuitem id="anima_attribute_menu" name="Anima Attribute" parent="manga_parent" action="anima_attribute_action"/>
             <menuitem id="anima_tag_menu" name="Anima Tag" parent="manga_parent" action="anima_tag_action"/>
+            <menuitem id="anima_author_menu" name="Anima Author" parent="manga_parent" action="anima_author_action"/>
         <menuitem id="config_parent" name="config" parent="manga_root"/>
     <menuitem id="anime_root" name="Anime"/>
     <!-- TODO: add anime menu in here -->
