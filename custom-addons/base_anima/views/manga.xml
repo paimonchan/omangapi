@@ -22,6 +22,8 @@
                     decoration-success="state == 'completed'"
                     decoration-info="state == 'ongoing'"
                     widget="badge" optional="show"/>
+                <field name="create_date" optional="hide"/>
+                <field name="write_date" optional="hide"/>
             </tree>
         </field>
     </record>
@@ -68,6 +70,13 @@
                             <field name="description_ids">
                                 <tree>
                                     <field name="lang"/>
+                                    <field name="name"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Author">
+                            <field name="author_ids">
+                                <tree>
                                     <field name="name"/>
                                 </tree>
                             </field>
