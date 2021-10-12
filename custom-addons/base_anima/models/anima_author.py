@@ -12,4 +12,4 @@ class AnimaAuthor(models.Model):
         'manga', 'manga_author_rel', 'author_id', 'manga_id')
     social_ids = fields.One2many(
         'anima.social.media', 'author_id')
-    source_id = fields.Char()
+    source_id = fields.Char(required=True)
