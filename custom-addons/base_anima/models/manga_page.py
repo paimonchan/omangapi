@@ -9,4 +9,4 @@ class MangaPage(models.Model):
     page = fields.Integer(required=True)
     chapter_id = fields.Many2one(
         'manga.chapter', 'Chapter', ondelete='cascade')
-    url = fields.Char()
+    url = fields.Char()    filename = fields.Char(required=True)
