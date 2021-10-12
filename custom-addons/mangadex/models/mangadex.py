@@ -262,3 +262,28 @@ class mangadex(models.AbstractModel):
         except Exception as ex:
             log.error(self, str(ex))
             raise
+
+    def _pull_manga_chapter(self, limit=1, offset=False, no_update_sysparam=False):
+        def _get_latest_offset():
+            sysparam = self.env['ir.config_parameter'].sudo()
+            next_offset = offset or int(sysparam.get_param(const.PARAMS_MANGADEX_LATEST_CHAPTER_OFFSET, 0))
+            return next_offset
+        
+        def _set_latest_offset(count):
+            sysparam = self.env['ir.config_parameter'].sudo()
+            offset = int(sysparam.get_param(const.PARAMS_MANGADEX_LATEST_CHAPTER_OFFSET, 0))
+            sysparam.set_param(const.PARAMS_MANGADEX_LATEST_CHAPTER_OFFSET, offset + count)
+        
+        def _main_cron():
+            # TODO: pull chapter list
+            datas = []
+            if not no_update_sysparam:
+                # update next offset
+                _set_latest_offset(len(datas))
+        
+        # main function logic
+        try:
+            _main_cron()
+        except Exception as ex:
+            log.error(self, str(ex))
+            raise

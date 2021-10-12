@@ -1,2 +1,3 @@
 PARAMS_MANGADEX_LATEST_MANGA_OFFSET = 'mangadex_latest_manga_offset'
 PARAMS_MANGADEX_LATEST_AUTHOR_OFFSET = 'mangadex_latest_author_offset'
+PARAMS_MANGADEX_LATEST_CHAPTER_OFFSET = 'mangadex_latest_chapter_offset'
