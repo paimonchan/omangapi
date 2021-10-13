@@ -173,6 +173,7 @@ class mangadex(models.AbstractModel):
                 author_source_ids = _destruct_author_source_ids(relationships)
                 _connect_existing_author(manga, author_source_ids)
                 manga_ids |= manga
+                # TODO: add function to connect new manga into existing chapter
 
             if not no_update_sysparam:
                 # update next offset
@@ -286,8 +287,39 @@ class mangadex(models.AbstractModel):
             return manga_ids
         
         def _main_cron():
-            # TODO: pull chapter list
-            datas = []
+            next_offset = offset or _get_latest_offset()
+            params = dict(limit=limit, offset=next_offset)
+            results = self.GET('/chapter', params)
+            datas = results.get('data', [])
+
+            chapter_model = self.env['manga.chapter']
+            chapter_ids = self.env['manga.chapter']
+            for result in datas:
+                relationships = result.get('relationships') or dict()
+                attributes = result.get('attributes') or dict()
+                chapter = attributes.get('chapter') or 0
+                volume = attributes.get('volume') or 0
+                source_hash = attributes.get('hash') or str()
+                source_id = result.get('id')
+
+                # check if already exist
+                exist = chapter_model.search(
+                    [('source_id', '=', source_id),], limit=1)
+                if exist:
+                    continue
+
+                manga_source_ids = _destruct_manga_source_ids(relationships)
+                manga_id = _get_manga_id(manga_source_ids)
+                chapter = chapter_model.create(dict(
+                    manga_id=manga_id.id or False,
+                    source_hash=source_hash,
+                    source_id=source_id,
+                    chapter=chapter,
+                    volume=volume,
+                ))
+                chapter_ids |= chapter
+                # TODO: get page list and create manga.page entries
+
             if not no_update_sysparam:
                 # update next offset
                 _set_latest_offset(len(datas))
