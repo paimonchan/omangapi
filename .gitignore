@@ -9,3 +9,4 @@
 extras/odoo.private.conf
 entrypoint.private.sh
 extras/google-auth.json
+api.rest
