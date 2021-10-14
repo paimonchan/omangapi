@@ -107,6 +107,13 @@ class mangadex(models.AbstractModel):
                 return
             manga.write(dict(manga_ids=[(4, id,) for id in authors.ids]))
         
+        def _connect_existing_chapter(manga):
+            chapters = self.env['manga.chapter'].search(
+                [('manga_source_id', '=', manga.source_id)])
+            if not chapters:
+                return
+            manga.write(dict(chapter_ids=[(4, id) for id in chapters.ids]))
+        
         def _main_cron():
             next_offset = offset or _get_latest_offset()
             params = dict(limit=limit, offset=next_offset)
@@ -172,8 +179,8 @@ class mangadex(models.AbstractModel):
                 ))
                 author_source_ids = _destruct_author_source_ids(relationships)
                 _connect_existing_author(manga, author_source_ids)
+                _connect_existing_chapter(manga)
                 manga_ids |= manga
-                # TODO: add function to connect new manga into existing chapter
 
             if not no_update_sysparam:
                 # update next offset
