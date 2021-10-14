@@ -278,6 +278,21 @@ class mangadex(models.AbstractModel):
         def _destruct_manga_source_id(relationships):
             source_ids = [rel['id'] for rel in relationships if rel['type'] == 'manga']
             return source_ids and source_ids[0] or []
+
+        def _prepare_manga_pages(low_images, high_images):
+            pages = []
+            for img in low_images:
+                pages.append((0, 0, dict(
+                    quality=anima_const.QUALITY_LOW,
+                    filename=img,
+                )))
+            
+            for img in high_images:
+                pages.append((0, 0, dict(
+                    quality=anima_const.QUALITY_HIGH,
+                    filename=img,
+                )))
+            return pages or False
         
         def _get_manga_id(source_id):
             # get only one manga title
@@ -297,6 +312,8 @@ class mangadex(models.AbstractModel):
             for result in datas:
                 relationships = result.get('relationships') or dict()
                 attributes = result.get('attributes') or dict()
+                low_images = attributes.get('dataSaver') or []
+                high_images = attributes.get('data') or []
                 chapter = attributes.get('chapter') or 0
                 volume = attributes.get('volume') or 0
                 source_hash = attributes.get('hash') or str()
@@ -308,6 +325,7 @@ class mangadex(models.AbstractModel):
                 if exist:
                     continue
 
+                page_ids = _prepare_manga_pages(low_images, high_images)
                 manga_source_id = _destruct_manga_source_id(relationships)
                 manga_id = _get_manga_id(manga_source_id)
                 chapter = chapter_model.create(dict(
@@ -315,11 +333,11 @@ class mangadex(models.AbstractModel):
                     manga_id=manga_id.id or False,
                     source_hash=source_hash,
                     source_id=source_id,
+                    page_ids=page_ids,
                     chapter=chapter,
                     volume=volume,
                 ))
                 chapter_ids |= chapter
-                # TODO: get page list and create manga.page entries
 
             if not no_update_sysparam:
                 # update next offset
