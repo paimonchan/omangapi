@@ -13,4 +13,6 @@ class MangaChapter(models.Model):
     page_ids = fields.Many2one('manga.page', 'Manga Page')
     source_id = fields.Char(required=True)
     source_hash = fields.Char()
+    manga_source_id = fields.Char(
+        help='used to connect manga into chapter on new created manga entry')
     url = fields.Char()
