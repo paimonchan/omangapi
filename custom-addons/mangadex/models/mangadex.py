@@ -275,14 +275,14 @@ class mangadex(models.AbstractModel):
             offset = int(sysparam.get_param(const.PARAMS_MANGADEX_LATEST_CHAPTER_OFFSET, 0))
             sysparam.set_param(const.PARAMS_MANGADEX_LATEST_CHAPTER_OFFSET, offset + count)
         
-        def _destruct_manga_source_ids(relationships):
+        def _destruct_manga_source_id(relationships):
             source_ids = [rel['id'] for rel in relationships if rel['type'] == 'manga']
-            return source_ids or []
+            return source_ids and source_ids[0] or []
         
-        def _get_manga_id(source_ids):
+        def _get_manga_id(source_id):
             # get only one manga title
             manga_ids = self.env['manga'].search([
-                ('source_id', 'in', source_ids)
+                ('source_id', '=', source_id)
             ], limit=1)
             return manga_ids
         
@@ -308,9 +308,10 @@ class mangadex(models.AbstractModel):
                 if exist:
                     continue
 
-                manga_source_ids = _destruct_manga_source_ids(relationships)
-                manga_id = _get_manga_id(manga_source_ids)
+                manga_source_id = _destruct_manga_source_id(relationships)
+                manga_id = _get_manga_id(manga_source_id)
                 chapter = chapter_model.create(dict(
+                    manga_source_id=manga_source_id,
                     manga_id=manga_id.id or False,
                     source_hash=source_hash,
                     source_id=source_id,
