@@ -114,6 +114,10 @@ class mangadex(models.AbstractModel):
                 return
             manga.write(dict(chapter_ids=[(4, id) for id in chapters.ids]))
         
+        def _destruct_cover_art(relationships):
+            covers = [rel['id'] for rel in relationships if rel['type'] == 'cover']
+            return covers and covers[0] or []
+        
         def _main_cron():
             next_offset = offset or _get_latest_offset()
             params = dict(limit=limit, offset=next_offset)
@@ -145,6 +149,7 @@ class mangadex(models.AbstractModel):
 
                 content_rating = _destruct_content_rating(content_rating_datas)
                 alt_titles = _desctruct_title(title_datas, alt_title_datas)
+                cover = _destruct_cover_art(relationships)
                 main_title = _main_title(title_datas)
                 alt_desc = _destruct_desc(desc_datas)
                 tags = _destruct_tags(tag_datas, pd)
@@ -172,6 +177,7 @@ class mangadex(models.AbstractModel):
                     title_ids=title_ids or False,
                     tag_ids=tag_ids or False,
                     description=main_desc,
+                    cover_filename=cover,
                     source_id=source_id,
                     name=main_title,
                     version=version,

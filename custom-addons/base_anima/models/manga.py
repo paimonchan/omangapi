@@ -27,6 +27,7 @@ class Manga(models.Model):
     version = fields.Integer(default=1)
     author_ids = fields.Many2many(
         'anima.author', 'manga_author_rel', 'manga_id', 'author_id')
+    cover_filename = fields.Char()
 
     _sql_constraints = [
         ('model_uniq','unique (source_id, source, version)',
