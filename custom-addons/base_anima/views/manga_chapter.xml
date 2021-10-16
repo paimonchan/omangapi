@@ -1,0 +1,72 @@
+<odoo>
+    <record model="ir.ui.view" id="manga_chapter_tree">
+        <field name="name">manga chapter tree</field>
+        <field name="model">manga.chapter</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="manga_id"/>
+                <field name="volume"/>
+                <field name="chapter"/>
+                <field name="source_hash"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="manga_chapter_form">
+        <field name="name">manga chapter from</field>
+        <field name="model">manga.chapter</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="manga_id"/>
+                            <field name="volume"/>
+                            <field name="chapter"/>
+                        </group>
+                        <group>
+                            <field name="source_id"/>
+                            <field name="source_hash"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Page(s)">
+                            <field name="page_ids">
+                                <tree>
+                                    <field name="page"/>
+                                    <field name="quality"/>
+                                    <field name="filename"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="manga_chapter_search">
+        <field name="name">manga chapter search</field>
+        <field name="model">manga.chapter</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="manga_id"/>
+                <field name="source_id"/>
+                <field name="source_hash"/>
+                <separator/>
+                <filter string="Manga" name="manga" domain="[('manga_id','!=', False)]"/>
+                <group expand="1" string="Group By">
+                    <filter string="Manga" name="manga" context="{'group_by':'manga_id'}"/>
+                    <filter string="Source Id" name="source_id" context="{'group_by':'source_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="manga_chapter_action" model="ir.actions.act_window">
+        <field name="name">Chapter</field>
+        <field name="res_model">manga.chapter</field>
+        <field name="view_mode">tree,form</field>
+        <field name="target">current</field>
+    </record>
+</odoo>

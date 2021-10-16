@@ -12,6 +12,7 @@
         'security/ir.model.access.csv',
         # load view model
         'views/anima_attribute.xml',
+        'views/manga_chapter.xml',
         'views/anima_author.xml',
         'views/anima_tag.xml',
         'views/manga.xml',
