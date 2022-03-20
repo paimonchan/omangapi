@@ -11,4 +11,4 @@ class AnimaSocialMedia(models.Model):
     author_id = fields.Many2one('anima.author')
     type = fields.Selection(
         const.SOCIAL_MEDIAL_TYPE_SELECTION, required=True)
-    url = fields.Char()
+    name = fields.Char()
