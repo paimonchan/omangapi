@@ -16,7 +16,7 @@
         <field name="name">manga chapter from</field>
         <field name="model">manga.chapter</field>
         <field name="arch" type="xml">
-            <form>
+            <form edit="0" delete="0">
                 <sheet>
                     <group>
                         <group>

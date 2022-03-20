@@ -32,7 +32,7 @@
         <field name="name">manga form</field>
         <field name="model">manga</field>
         <field name="arch" type="xml">
-            <form>
+            <form edit="0" delete="0">
                 <sheet>
                     <group>
                         <group>

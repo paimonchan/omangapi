@@ -14,7 +14,7 @@
         <field name="name">anima author from</field>
         <field name="model">anima.author</field>
         <field name="arch" type="xml">
-            <form>
+            <form edit="0" delete="0">
                 <sheet>
                     <group>
                         <group>
