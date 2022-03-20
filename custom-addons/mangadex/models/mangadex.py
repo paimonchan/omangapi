@@ -105,7 +105,7 @@ class mangadex(models.AbstractModel):
                 [('source_id', 'in', author_source_ids)])
             if not authors:
                 return
-            manga.write(dict(manga_ids=[(4, id,) for id in authors.ids]))
+            manga.write(dict(author_ids=[(4, id,) for id in authors.ids]))
         
         def _connect_existing_chapter(manga):
             chapters = self.env['manga.chapter'].search(
