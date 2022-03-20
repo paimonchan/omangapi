@@ -224,7 +224,7 @@ class mangadex(models.AbstractModel):
                 'youtube', 'website'
             ]
             social_medias = [
-                (0, 0, dict(name=val)) for key, val in 
+                (0, 0, dict(name=val, type=val)) for key, val in 
                 attributes.items() if (key in medias and val)
             ]
             return social_medias
