@@ -8,6 +8,9 @@ db_user = <db_user>
 db_password = <db_password>
 db_name = <db_name>
 addons_path = addons,../custom-addons
+list_db = False
+
+logfile=/var/log/odoo/odoo-omangapi.log
 
 ; manga source
 source_mangadex = https://api.mangadex.org
