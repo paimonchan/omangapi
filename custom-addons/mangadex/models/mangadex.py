@@ -5,6 +5,9 @@ from ..helpers import const
 from odoo.addons.base_common.helpers import log
 from odoo.addons.base_anima.helpers import const as anima_const
 
+import logging
+logger = logging.getLogger(__name__)
+
 class mangadex(models.AbstractModel):
     _inherit = 'request'
     _name = 'source.mangadex'
@@ -277,7 +280,7 @@ class mangadex(models.AbstractModel):
             log.error(self, str(ex))
             raise
 
-    def _pull_manga_chapter(self, limit=1, offset=False, no_update_sysparam=False):
+    def pull_manga_chapter(self, limit=1, offset=False, no_update_sysparam=False):
         def _get_latest_offset():
             sysparam = self.env['ir.config_parameter'].sudo()
             next_offset = offset or int(sysparam.get_param(const.PARAMS_MANGADEX_LATEST_CHAPTER_OFFSET, 0))
