@@ -365,3 +365,8 @@ class mangadex(models.AbstractModel):
         except Exception as ex:
             log.error(self, str(ex))
             raise
+
+    def pull_page(self):
+        # TODO: fetch pages data from chapter
+        # the pages image url only valid for 15 minutes
+        pass
